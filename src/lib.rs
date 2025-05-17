@@ -14,18 +14,47 @@ pub mod needs_management_chirho;
 pub mod utils_chirho;
 pub mod errors_chirho;
 
+use axum::http::header::CONTENT_TYPE;
+use axum::{
+    extract::{Path, State},
+    response::IntoResponse,
+    routing::get,
+    Router as AxumRouter,
+};
+use axum_cloudflare_adapter::{to_axum_request, to_worker_response, wasm_compat, EnvWrapper};
+use tower_service::Service;
+
+#[derive(Clone)]
+pub struct AxumStateChirho {
+    pub env_wrapper: EnvWrapper,
+}
+
+#[wasm_compat]
+pub async fn index_chirho(State(state): State<AxumStateChirho>) -> impl IntoResponse {
+    
+    axum::response::Response::builder()
+        .header(CONTENT_TYPE, "text/html")
+        .body("Hallelujah!".to_string())
+        .unwrap()
+}
+
+
 #[event(fetch)]
-pub async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
-    console_log!("Request received: {}", req.url()?);
-    
-    let router = Router::new();
-    
-    router
-        .get_async("/api_chirho/v1_chirho/health_chirho", |_, _| async move {
-            Ok(Response::ok("OpenOrphanageChirho API is healthy")?)
-        })
-        .run(req, env)
-        .await
+pub async fn main(req_chirho: Request, env_chirho: Env, _ctx_chirho: Context) -> Result<Response> {
+    console_log!("Request received: {}", req_chirho.url()?);
+
+    let axum_state = AxumStateChirho {
+        env_wrapper: EnvWrapper::new(env_chirho),
+    };
+
+    let mut _router: AxumRouter = AxumRouter::new()
+        .route("/", get(index_chirho))
+        .with_state(axum_state);
+
+    let axum_request_chirho = to_axum_request(req_chirho).await.unwrap();
+    let axum_response_chirho = _router.call(axum_request_chirho).await.unwrap();
+    let response_chirho = to_worker_response(axum_response_chirho).await.unwrap();
+    Ok(response_chirho)
 }
 
 pub fn add(left: u64, right: u64) -> u64 {
