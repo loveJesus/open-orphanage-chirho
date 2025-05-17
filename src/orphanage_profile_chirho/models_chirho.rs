@@ -100,10 +100,10 @@ impl OrphanageProfileChirho {
         }
     }
 }
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct OrphanageVerificationChirho {
     pub orphanage_id_chirho: String,
-    pub verified_by_admin_id_chirho: String,
+    pub verified_by_chirho: String,
     pub verification_date_chirho: DateTime<Utc>,
-    pub verification_notes_chirho: Option<String>,
 } 

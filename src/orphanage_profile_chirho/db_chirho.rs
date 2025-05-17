@@ -7,7 +7,7 @@ use wasm_bindgen::JsValue;
 use chrono::{DateTime, Utc};
 
 use crate::errors_chirho::ErrorChirho;
-use super::models_chirho::{OrphanageProfileChirho, OrphanageUpdateChirho};
+use super::models_chirho::{OrphanageProfileChirho, OrphanageUpdateChirho, OrphanageVerificationChirho};
 
 pub struct OrphanageDbChirho {
     pub db_chirho: D1Database,
@@ -116,6 +116,28 @@ impl OrphanageDbChirho {
             .bind(&[JsValue::from_str(orphanage_id_chirho)])?
             .run()
             .await?;
+        Ok(())
+    }
+
+    pub async fn verify_orphanage_chirho(&self, verification_chirho: OrphanageVerificationChirho) -> Result<(), ErrorChirho> {
+        let query_chirho = r#"
+            UPDATE orphanage_profiles_chirho 
+            SET is_verified_chirho = true,
+                verification_date_chirho = ?,
+                verified_by_chirho = ?
+            WHERE orphanage_id_chirho = ?
+        "#;
+
+        self.db_chirho
+            .prepare(query_chirho)
+            .bind(&[
+                JsValue::from_str(&verification_chirho.verification_date_chirho.to_rfc3339()),
+                JsValue::from_str(&verification_chirho.verified_by_chirho),
+                JsValue::from_str(&verification_chirho.orphanage_id_chirho),
+            ])?
+            .run()
+            .await?;
+
         Ok(())
     }
 } 

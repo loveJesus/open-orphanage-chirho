@@ -3,7 +3,6 @@
 // John 3:16 (KJV)
 
 use worker::*;
-use wasm_bindgen::prelude::*;
 
 pub mod user_management_chirho;
 pub mod orphanage_profile_chirho;

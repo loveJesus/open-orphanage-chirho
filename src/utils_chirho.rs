@@ -5,7 +5,6 @@ use chrono::{DateTime, Utc};
 use uuid::Uuid;
 use worker::*;
 use serde::Serialize;
-use worker::*;
 use crate::errors_chirho::ErrorChirho;
 
 pub fn generate_uuid_chirho() -> String {

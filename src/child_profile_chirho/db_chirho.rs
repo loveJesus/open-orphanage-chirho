@@ -120,22 +120,22 @@ impl ChildDbChirho {
     }
 
     pub async fn create_child_update_chirho(&self, update_chirho: ChildUpdateChirho) -> Result<(), ErrorChirho> {
-        let db_chirho = self.env_chirho.d1("DB_CHIRHO")?;
-        let stmt_chirho = db_chirho.prepare(
-            "INSERT INTO child_updates_chirho (
+        let query_chirho = r#"
+            INSERT INTO child_updates_chirho (
                 update_id_chirho, child_id_chirho, staff_user_id_chirho,
                 update_text_chirho, date_posted_chirho, visibility_chirho
-            ) VALUES (?, ?, ?, ?, ?, ?)"
-        );
+            ) VALUES (?, ?, ?, ?, ?, ?)
+        "#;
 
-        stmt_chirho
+        self.db_chirho
+            .prepare(query_chirho)
             .bind(&[
-                update_chirho.update_id_chirho.into(),
-                update_chirho.child_id_chirho.into(),
-                update_chirho.staff_user_id_chirho.into(),
-                update_chirho.update_text_chirho.into(),
-                update_chirho.date_posted_chirho.to_rfc3339().into(),
-                serde_json::to_string(&update_chirho.visibility_chirho)?.into(),
+                JsValue::from_str(&update_chirho.update_id_chirho),
+                JsValue::from_str(&update_chirho.child_id_chirho),
+                JsValue::from_str(&update_chirho.staff_user_id_chirho),
+                JsValue::from_str(&update_chirho.update_text_chirho),
+                JsValue::from_str(&update_chirho.date_posted_chirho.to_rfc3339()),
+                JsValue::from_str(&update_chirho.visibility_chirho.to_string()),
             ])?
             .run()
             .await?;

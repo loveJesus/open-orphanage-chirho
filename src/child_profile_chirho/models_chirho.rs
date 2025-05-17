@@ -23,12 +23,12 @@ pub struct ChildProfileChirho {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ChildUpdateChirho {
-    pub given_name_chirho: Option<String>,
-    pub date_of_birth_chirho: Option<DateTime<Utc>>,
-    pub gender_chirho: Option<String>,
-    pub medical_history_chirho: Option<String>,
-    pub education_level_chirho: Option<String>,
-    pub sponsorship_status_chirho: Option<SponsorshipStatusChirho>,
+    pub update_id_chirho: String,
+    pub child_id_chirho: String,
+    pub staff_user_id_chirho: String,
+    pub update_text_chirho: String,
+    pub date_posted_chirho: DateTime<Utc>,
+    pub visibility_chirho: UpdateVisibilityChirho,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
@@ -44,6 +44,23 @@ impl fmt::Display for SponsorshipStatusChirho {
             SponsorshipStatusChirho::AvailableChirho => write!(f, "Available"),
             SponsorshipStatusChirho::PendingChirho => write!(f, "Pending"),
             SponsorshipStatusChirho::SponsoredChirho => write!(f, "Sponsored"),
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+pub enum UpdateVisibilityChirho {
+    PublicChirho,
+    PrivateChirho,
+    StaffOnlyChirho,
+}
+
+impl fmt::Display for UpdateVisibilityChirho {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            UpdateVisibilityChirho::PublicChirho => write!(f, "public_chirho"),
+            UpdateVisibilityChirho::PrivateChirho => write!(f, "private_chirho"),
+            UpdateVisibilityChirho::StaffOnlyChirho => write!(f, "staff_only_chirho"),
         }
     }
 }
@@ -71,26 +88,22 @@ impl ChildProfileChirho {
             updated_at_chirho: now_chirho,
         }
     }
+}
 
-    pub fn update(&mut self, update_chirho: ChildUpdateChirho) {
-        if let Some(given_name_chirho) = update_chirho.given_name_chirho {
-            self.given_name_chirho = given_name_chirho;
+impl ChildUpdateChirho {
+    pub fn new(
+        child_id_chirho: String,
+        staff_user_id_chirho: String,
+        update_text_chirho: String,
+        visibility_chirho: UpdateVisibilityChirho,
+    ) -> Self {
+        Self {
+            update_id_chirho: Uuid::new_v4().to_string(),
+            child_id_chirho,
+            staff_user_id_chirho,
+            update_text_chirho,
+            date_posted_chirho: Utc::now(),
+            visibility_chirho,
         }
-        if let Some(date_of_birth_chirho) = update_chirho.date_of_birth_chirho {
-            self.date_of_birth_chirho = date_of_birth_chirho;
-        }
-        if let Some(gender_chirho) = update_chirho.gender_chirho {
-            self.gender_chirho = gender_chirho;
-        }
-        if let Some(medical_history_chirho) = update_chirho.medical_history_chirho {
-            self.medical_history_chirho = medical_history_chirho;
-        }
-        if let Some(education_level_chirho) = update_chirho.education_level_chirho {
-            self.education_level_chirho = education_level_chirho;
-        }
-        if let Some(sponsorship_status_chirho) = update_chirho.sponsorship_status_chirho {
-            self.sponsorship_status_chirho = sponsorship_status_chirho;
-        }
-        self.updated_at_chirho = Utc::now();
     }
 } 
