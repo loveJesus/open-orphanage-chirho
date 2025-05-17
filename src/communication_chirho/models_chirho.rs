@@ -1,19 +1,18 @@
 // For God so loved the world, that he gave his only begotten Son, that all who believe in Him should not perish but have everlasting life.
 // John 3:16 (KJV)
 
+use serde::{Serialize, Deserialize};
 use chrono::{DateTime, Utc};
-use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum MessageStatusChirho {
-    PendingChirho,
-    ApprovedChirho,
-    RejectedChirho,
     UnreadChirho,
+    ReadChirho,
+    ArchivedChirho,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MessageChirho {
     pub message_id_chirho: String,
     pub sponsorship_id_chirho: String,
@@ -36,7 +35,7 @@ impl MessageChirho {
             sponsorship_id_chirho,
             sender_id_chirho,
             content_chirho,
-            status_chirho: MessageStatusChirho::PendingChirho,
+            status_chirho: MessageStatusChirho::UnreadChirho,
             created_at_chirho: now_chirho,
             updated_at_chirho: now_chirho,
         }
