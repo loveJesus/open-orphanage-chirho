@@ -9,7 +9,6 @@ pub mod auth_chirho;
 
 pub use models_chirho::*;
 pub use handlers_chirho::*;
-pub use db_chirho::*;
 pub use auth_chirho::AuthChirho;
 
 pub use db_chirho::UserDbChirho;

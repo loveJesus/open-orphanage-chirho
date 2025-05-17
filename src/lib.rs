@@ -1,29 +1,35 @@
 // For God so loved the world, that he gave his only begotten Son,
-// that whosoever believeth in him should not perish, but have everlasting life.
+// that all who believe in Him should not perish but have everlasting life.
 // John 3:16 (KJV)
 
-use worker::*;
+use axum::{
+    Router,
+    routing::get,
+    extract::State,
+    response::IntoResponse,
+    http::StatusCode,
+    Json,
+};
+use serde_json::json;
+use axum_cloudflare_adapter::{wasm_compat, EnvWrapper};
+
+use user_management_chirho::handlers_chirho::get_routes_chirho as get_user_routes_chirho;
+use orphanage_profile_chirho::handlers_chirho::get_routes_chirho as get_orphanage_routes_chirho;
+use child_profile_chirho::handlers_chirho::get_routes_chirho as get_child_routes_chirho;
+use sponsorship_chirho::handlers_chirho::get_routes_chirho as get_sponsorship_routes_chirho;
+use donation_management_chirho::handlers_chirho::get_routes_chirho as get_donation_routes_chirho;
+use communication_chirho::handlers_chirho::get_routes_chirho as get_communication_routes_chirho;
+use needs_management_chirho::handlers_chirho::get_routes_chirho as get_needs_routes_chirho;
 
 pub mod user_management_chirho;
 pub mod orphanage_profile_chirho;
-pub mod communication_chirho;
 pub mod child_profile_chirho;
 pub mod sponsorship_chirho;
 pub mod donation_management_chirho;
+pub mod communication_chirho;
 pub mod needs_management_chirho;
-pub mod utils_chirho;
 pub mod errors_chirho;
-pub mod routes_chirho;
-
-use axum::http::header::CONTENT_TYPE;
-use axum::{
-    extract::{Path, State},
-    response::IntoResponse,
-    routing::get,
-    Router as AxumRouter,
-};
-use axum_cloudflare_adapter::{to_axum_request, to_worker_response, wasm_compat, EnvWrapper};
-use tower_service::Service;
+pub mod utils_chirho;
 
 #[derive(Clone)]
 pub struct AxumStateChirho {
@@ -31,32 +37,23 @@ pub struct AxumStateChirho {
 }
 
 #[wasm_compat]
-pub async fn index_chirho(State(state): State<AxumStateChirho>) -> impl IntoResponse {
-    
-    axum::response::Response::builder()
-        .header(CONTENT_TYPE, "text/html")
-        .body("Hallelujah!".to_string())
-        .unwrap()
+pub async fn index_chirho(State(_state): State<AxumStateChirho>) -> impl IntoResponse {
+    (StatusCode::OK, Json(json!({
+        "message": "Welcome to OpenOrphanageChirho API",
+        "version": "1.0.0"
+    })))
 }
 
-
-#[event(fetch)]
-pub async fn main(req_chirho: Request, env_chirho: Env, _ctx_chirho: Context) -> Result<Response> {
-    console_log!("Request received: {}", req_chirho.url()?);
-
-    let axum_state = AxumStateChirho {
-        env_wrapper: EnvWrapper::new(env_chirho),
-    };
-
-    let mut _router: AxumRouter = AxumRouter::new()
+pub fn get_routes_chirho() -> Router<AxumStateChirho> {
+    Router::new()
         .route("/", get(index_chirho))
-        .merge(routes_chirho::get_all_routes_chirho())
-        .with_state(axum_state);
-
-    let axum_request_chirho = to_axum_request(req_chirho).await.unwrap();
-    let axum_response_chirho = _router.call(axum_request_chirho).await.unwrap();
-    let response_chirho = to_worker_response(axum_response_chirho).await.unwrap();
-    Ok(response_chirho)
+        .merge(get_user_routes_chirho())
+        .merge(get_orphanage_routes_chirho())
+        .merge(get_child_routes_chirho())
+        .merge(get_sponsorship_routes_chirho())
+        .merge(get_donation_routes_chirho())
+        .merge(get_communication_routes_chirho())
+        .merge(get_needs_routes_chirho())
 }
 
 pub fn add(left: u64, right: u64) -> u64 {

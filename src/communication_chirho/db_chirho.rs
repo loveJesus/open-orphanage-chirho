@@ -4,7 +4,6 @@
 // Database access for communication_chirho module. 
 
 use worker::*;
-use crate::errors_chirho::ErrorChirho;
 use super::models_chirho::{MessageChirho, MessageStatusChirho};
 
 pub struct MessageDbChirho {
@@ -23,28 +22,34 @@ impl MessageDbChirho {
             INSERT INTO messages_chirho (
                 message_id_chirho,
                 sponsorship_id_chirho,
-                sender_id_chirho,
-                content_chirho,
-                status_chirho,
+                sender_user_id_chirho,
+                receiver_child_id_chirho,
+                message_text_chirho,
+                sent_at_chirho,
+                read_status_chirho,
+                moderation_status_chirho,
+                moderator_staff_user_id_chirho,
                 created_at_chirho,
                 updated_at_chirho
-            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         "#;
-
         self.db_chirho
             .prepare(query_chirho)
             .bind(&[
-                message_chirho.message_id_chirho.into(),
-                message_chirho.sponsorship_id_chirho.into(),
-                message_chirho.sender_id_chirho.into(),
-                message_chirho.content_chirho.into(),
-                format!("{:?}", message_chirho.status_chirho).into(),
+                message_chirho.message_id_chirho.clone().into(),
+                message_chirho.sponsorship_id_chirho.clone().into(),
+                message_chirho.sender_user_id_chirho.clone().into(),
+                message_chirho.receiver_child_id_chirho.clone().into(),
+                message_chirho.message_text_chirho.clone().into(),
+                message_chirho.sent_at_chirho.to_rfc3339().into(),
+                message_chirho.read_status_chirho.into(),
+                format!("{:?}", message_chirho.moderation_status_chirho).into(),
+                message_chirho.moderator_staff_user_id_chirho.clone().unwrap_or_default().into(),
                 message_chirho.created_at_chirho.to_rfc3339().into(),
                 message_chirho.updated_at_chirho.to_rfc3339().into(),
             ])?
             .run()
             .await?;
-
         Ok(())
     }
 

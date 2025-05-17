@@ -4,7 +4,7 @@
 use axum::{
     Router,
     routing::{get, post},
-    extract::{State, Json, Path},
+    extract::{State, Path, Json},
     response::IntoResponse,
     http::StatusCode,
 };
@@ -12,7 +12,6 @@ use serde_json::json;
 use uuid::Uuid;
 use chrono::Utc;
 use axum_cloudflare_adapter::wasm_compat;
-use worker::Env;
 
 use crate::AxumStateChirho;
 use super::{
@@ -37,7 +36,7 @@ pub async fn create_message_handler_chirho(
 ) -> impl IntoResponse {
     let mut message_chirho = message_chirho;
     message_chirho.message_id_chirho = Uuid::new_v4().to_string();
-    message_chirho.status_chirho = MessageStatusChirho::UnreadChirho;
+    message_chirho.moderation_status_chirho = MessageStatusChirho::PendingChirho;
     message_chirho.created_at_chirho = Utc::now();
     message_chirho.updated_at_chirho = Utc::now();
 
