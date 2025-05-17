@@ -45,4 +45,13 @@ impl NeedChirho {
             updated_at_chirho: now_chirho,
         }
     }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct NeedUpdateChirho {
+    pub title_chirho: Option<String>,
+    pub description_chirho: Option<String>,
+    pub amount_needed_chirho: Option<f64>,
+    pub amount_raised_chirho: Option<f64>,
+    pub status_chirho: Option<NeedStatusChirho>,
 } 

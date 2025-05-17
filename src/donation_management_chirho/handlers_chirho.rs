@@ -9,13 +9,13 @@ use axum::{
     response::IntoResponse,
     http::StatusCode,
 };
+use axum_cloudflare_adapter::wasm_compat;
 use serde_json::json;
 use uuid::Uuid;
 use chrono::Utc;
 
 use crate::{
     AxumStateChirho,
-    errors_chirho::ErrorChirho,
 };
 use super::{
     models_chirho::{
@@ -25,7 +25,7 @@ use super::{
     db_chirho::DonationDbChirho,
 };
 
-#[axum::debug_handler]
+#[wasm_compat]
 pub async fn create_donation_handler_chirho(
     State(state_chirho): State<AxumStateChirho>,
     Json(donation_chirho): Json<DonationChirho>,
@@ -36,19 +36,19 @@ pub async fn create_donation_handler_chirho(
     donation_chirho.created_at_chirho = Utc::now();
     donation_chirho.updated_at_chirho = Utc::now();
 
-    let db_chirho = DonationDbChirho::new(state_chirho.env_wrapper.env.d1("DB_CHIRHO").unwrap());
+    let db_chirho = DonationDbChirho::new((*state_chirho.env_wrapper.env).clone());
     match db_chirho.create_donation_chirho(donation_chirho.clone()).await {
         Ok(_) => (StatusCode::CREATED, Json(json!(donation_chirho))).into_response(),
         Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, Json(json!({"error": e.to_string()}))).into_response(),
     }
 }
 
-#[axum::debug_handler]
+#[wasm_compat]
 pub async fn get_donation_handler_chirho(
     State(state_chirho): State<AxumStateChirho>,
     Path(donation_id_chirho): Path<String>,
 ) -> impl IntoResponse {
-    let db_chirho = DonationDbChirho::new(state_chirho.env_wrapper.env.d1("DB_CHIRHO").unwrap());
+    let db_chirho = DonationDbChirho::new((*state_chirho.env_wrapper.env).clone());
     match db_chirho.get_donation_chirho(&donation_id_chirho).await {
         Ok(Some(donation_chirho)) => (StatusCode::OK, Json(json!(donation_chirho))).into_response(),
         Ok(None) => (StatusCode::NOT_FOUND, Json(json!({"error": "Donation not found"}))).into_response(),
@@ -56,37 +56,37 @@ pub async fn get_donation_handler_chirho(
     }
 }
 
-#[axum::debug_handler]
+#[wasm_compat]
 pub async fn update_donation_status_handler_chirho(
     State(state_chirho): State<AxumStateChirho>,
     Path(donation_id_chirho): Path<String>,
     Json(status_chirho): Json<DonationStatusChirho>,
 ) -> impl IntoResponse {
-    let db_chirho = DonationDbChirho::new(state_chirho.env_wrapper.env.d1("DB_CHIRHO").unwrap());
+    let db_chirho = DonationDbChirho::new((*state_chirho.env_wrapper.env).clone());
     match db_chirho.update_donation_status_chirho(&donation_id_chirho, status_chirho).await {
         Ok(_) => (StatusCode::OK, Json(json!({"message": "Donation status updated successfully"}))).into_response(),
         Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, Json(json!({"error": e.to_string()}))).into_response(),
     }
 }
 
-#[axum::debug_handler]
+#[wasm_compat]
 pub async fn get_donor_donations_handler_chirho(
     State(state_chirho): State<AxumStateChirho>,
     Path(donor_id_chirho): Path<String>,
 ) -> impl IntoResponse {
-    let db_chirho = DonationDbChirho::new(state_chirho.env_wrapper.env.d1("DB_CHIRHO").unwrap());
+    let db_chirho = DonationDbChirho::new((*state_chirho.env_wrapper.env).clone());
     match db_chirho.get_donor_donations_chirho(&donor_id_chirho).await {
         Ok(donations_chirho) => (StatusCode::OK, Json(json!(donations_chirho))).into_response(),
         Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, Json(json!({"error": e.to_string()}))).into_response(),
     }
 }
 
-#[axum::debug_handler]
+#[wasm_compat]
 pub async fn get_orphanage_donations_handler_chirho(
     State(state_chirho): State<AxumStateChirho>,
     Path(orphanage_id_chirho): Path<String>,
 ) -> impl IntoResponse {
-    let db_chirho = DonationDbChirho::new(state_chirho.env_wrapper.env.d1("DB_CHIRHO").unwrap());
+    let db_chirho = DonationDbChirho::new((*state_chirho.env_wrapper.env).clone());
     match db_chirho.get_orphanage_donations_chirho(&orphanage_id_chirho).await {
         Ok(donations_chirho) => (StatusCode::OK, Json(json!(donations_chirho))).into_response(),
         Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, Json(json!({"error": e.to_string()}))).into_response(),

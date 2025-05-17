@@ -7,10 +7,10 @@ use worker::*;
 pub mod user_management_chirho;
 pub mod orphanage_profile_chirho;
 pub mod communication_chirho;
-/*pub mod child_profile_chirho;
+pub mod child_profile_chirho;
 pub mod sponsorship_chirho;
 pub mod donation_management_chirho;
-pub mod needs_management_chirho;*/
+pub mod needs_management_chirho;
 pub mod utils_chirho;
 pub mod errors_chirho;
 pub mod routes_chirho;
