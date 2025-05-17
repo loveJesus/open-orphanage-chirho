@@ -9,13 +9,13 @@ use axum::{
     response::IntoResponse,
     http::StatusCode,
 };
+use axum_cloudflare_adapter::wasm_compat;
 use serde_json::json;
 use uuid::Uuid;
 use chrono::Utc;
 
 use crate::{
     AxumStateChirho,
-    errors_chirho::ErrorChirho,
 };
 use super::{
     models_chirho::{
@@ -26,7 +26,7 @@ use super::{
     db_chirho::SponsorshipDbChirho,
 };
 
-#[axum::debug_handler]
+#[wasm_compat]
 pub async fn create_sponsorship_handler_chirho(
     State(state_chirho): State<AxumStateChirho>,
     Json(sponsorship_chirho): Json<SponsorshipChirho>,
@@ -37,19 +37,19 @@ pub async fn create_sponsorship_handler_chirho(
     sponsorship_chirho.created_at_chirho = Utc::now();
     sponsorship_chirho.updated_at_chirho = Utc::now();
 
-    let db_chirho = SponsorshipDbChirho::new(state_chirho.env_wrapper.env.d1("DB_CHIRHO").unwrap());
+    let db_chirho = SponsorshipDbChirho::new((*state_chirho.env_wrapper.env).clone());
     match db_chirho.create_sponsorship_chirho(sponsorship_chirho.clone()).await {
         Ok(_) => (StatusCode::CREATED, Json(json!(sponsorship_chirho))).into_response(),
         Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, Json(json!({"error": e.to_string()}))).into_response(),
     }
 }
 
-#[axum::debug_handler]
+#[wasm_compat]
 pub async fn get_sponsorship_handler_chirho(
     State(state_chirho): State<AxumStateChirho>,
     Path(sponsorship_id_chirho): Path<String>,
 ) -> impl IntoResponse {
-    let db_chirho = SponsorshipDbChirho::new(state_chirho.env_wrapper.env.d1("DB_CHIRHO").unwrap());
+    let db_chirho = SponsorshipDbChirho::new((*state_chirho.env_wrapper.env).clone());
     match db_chirho.get_sponsorship_chirho(&sponsorship_id_chirho).await {
         Ok(Some(sponsorship_chirho)) => (StatusCode::OK, Json(json!(sponsorship_chirho))).into_response(),
         Ok(None) => (StatusCode::NOT_FOUND, Json(json!({"error": "Sponsorship not found"}))).into_response(),
@@ -57,49 +57,49 @@ pub async fn get_sponsorship_handler_chirho(
     }
 }
 
-#[axum::debug_handler]
+#[wasm_compat]
 pub async fn update_sponsorship_handler_chirho(
     State(state_chirho): State<AxumStateChirho>,
     Path(sponsorship_id_chirho): Path<String>,
     Json(update_chirho): Json<SponsorshipUpdateChirho>,
 ) -> impl IntoResponse {
-    let db_chirho = SponsorshipDbChirho::new(state_chirho.env_wrapper.env.d1("DB_CHIRHO").unwrap());
+    let db_chirho = SponsorshipDbChirho::new((*state_chirho.env_wrapper.env).clone());
     match db_chirho.update_sponsorship_chirho(&sponsorship_id_chirho, update_chirho).await {
         Ok(_) => (StatusCode::OK, Json(json!({"message": "Sponsorship updated successfully"}))).into_response(),
         Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, Json(json!({"error": e.to_string()}))).into_response(),
     }
 }
 
-#[axum::debug_handler]
+#[wasm_compat]
 pub async fn delete_sponsorship_handler_chirho(
     State(state_chirho): State<AxumStateChirho>,
     Path(sponsorship_id_chirho): Path<String>,
 ) -> impl IntoResponse {
-    let db_chirho = SponsorshipDbChirho::new(state_chirho.env_wrapper.env.d1("DB_CHIRHO").unwrap());
+    let db_chirho = SponsorshipDbChirho::new((*state_chirho.env_wrapper.env).clone());
     match db_chirho.delete_sponsorship_chirho(&sponsorship_id_chirho).await {
         Ok(_) => (StatusCode::OK, Json(json!({"message": "Sponsorship deleted successfully"}))).into_response(),
         Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, Json(json!({"error": e.to_string()}))).into_response(),
     }
 }
 
-#[axum::debug_handler]
+#[wasm_compat]
 pub async fn get_sponsor_sponsorships_handler_chirho(
     State(state_chirho): State<AxumStateChirho>,
     Path(sponsor_id_chirho): Path<String>,
 ) -> impl IntoResponse {
-    let db_chirho = SponsorshipDbChirho::new(state_chirho.env_wrapper.env.d1("DB_CHIRHO").unwrap());
+    let db_chirho = SponsorshipDbChirho::new((*state_chirho.env_wrapper.env).clone());
     match db_chirho.get_sponsor_sponsorships_chirho(&sponsor_id_chirho).await {
         Ok(sponsorships_chirho) => (StatusCode::OK, Json(json!(sponsorships_chirho))).into_response(),
         Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, Json(json!({"error": e.to_string()}))).into_response(),
     }
 }
 
-#[axum::debug_handler]
+#[wasm_compat]
 pub async fn get_child_sponsorships_handler_chirho(
     State(state_chirho): State<AxumStateChirho>,
     Path(child_id_chirho): Path<String>,
 ) -> impl IntoResponse {
-    let db_chirho = SponsorshipDbChirho::new(state_chirho.env_wrapper.env.d1("DB_CHIRHO").unwrap());
+    let db_chirho = SponsorshipDbChirho::new((*state_chirho.env_wrapper.env).clone());
     match db_chirho.get_child_sponsorships_chirho(&child_id_chirho).await {
         Ok(sponsorships_chirho) => (StatusCode::OK, Json(json!(sponsorships_chirho))).into_response(),
         Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, Json(json!({"error": e.to_string()}))).into_response(),
