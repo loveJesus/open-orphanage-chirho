@@ -11,7 +11,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 worker = { version = "0.5.0", features = ["d1"] }
-axum = { version = "~0.8.4", default-features = false }
+axum = { version = "~0.8.4", default-features = false, features = ["json", "macros"] }
 axum-cloudflare-adapter = { version = "~0.14.0" }
 tower-service = "~0.3.3"
 url = "2.5.4"

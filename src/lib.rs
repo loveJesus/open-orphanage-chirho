@@ -6,13 +6,14 @@ use worker::*;
 
 pub mod user_management_chirho;
 pub mod orphanage_profile_chirho;
-pub mod child_profile_chirho;
+/*pub mod child_profile_chirho;
 pub mod sponsorship_chirho;
 pub mod donation_management_chirho;
 pub mod communication_chirho;
-pub mod needs_management_chirho;
+pub mod needs_management_chirho;*/
 pub mod utils_chirho;
 pub mod errors_chirho;
+pub mod routes_chirho;
 
 use axum::http::header::CONTENT_TYPE;
 use axum::{
@@ -49,6 +50,7 @@ pub async fn main(req_chirho: Request, env_chirho: Env, _ctx_chirho: Context) ->
 
     let mut _router: AxumRouter = AxumRouter::new()
         .route("/", get(index_chirho))
+        .merge(routes_chirho::get_all_routes_chirho())
         .with_state(axum_state);
 
     let axum_request_chirho = to_axum_request(req_chirho).await.unwrap();

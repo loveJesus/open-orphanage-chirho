@@ -2,21 +2,17 @@
 // that all who believe in Him should not perish but have everlasting life.
 // John 3:16 (KJV)
 
-mod models_chirho;
-mod db_chirho;
-mod auth_chirho;
-mod handlers_chirho;
+pub mod models_chirho;
+pub mod handlers_chirho;
+pub mod db_chirho;
+pub mod auth_chirho;
 
-pub use models_chirho::{
-    StaffUserChirho,
-    SponsorUserChirho,
-    PlatformAdminChirho,
-    UserRoleChirho,
-    LoginResponseChirho,
-};
+pub use models_chirho::*;
+pub use handlers_chirho::*;
+pub use db_chirho::*;
+pub use auth_chirho::AuthChirho;
 
 pub use db_chirho::UserDbChirho;
-pub use auth_chirho::AuthChirho;
 
 pub use handlers_chirho::{
     create_staff_user_handler_chirho,
