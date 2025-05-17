@@ -4,7 +4,6 @@
 use worker::*;
 use wasm_bindgen::JsValue;
 
-use crate::errors_chirho::ErrorChirho;
 use super::models_chirho::{StaffUserChirho, SponsorUserChirho, PlatformAdminChirho};
 
 pub struct UserDbChirho {

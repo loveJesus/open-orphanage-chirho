@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "dev_chirho": "npx wrangler dev",
+    "deploy_chirho": "npx wrangler deploy"
+  },
   "devDependencies": {
     "wrangler": "^4.15.2"
   },

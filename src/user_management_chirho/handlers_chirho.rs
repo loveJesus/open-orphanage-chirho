@@ -3,7 +3,6 @@
 
 use worker::*;
 use uuid::Uuid;
-use chrono::Utc;
 
 use crate::errors_chirho::ErrorChirho;
 use crate::utils_chirho::json_response_chirho;
@@ -15,7 +14,7 @@ pub async fn create_staff_user_handler_chirho(
     mut req_chirho: Request,
     env_chirho: Env,
 ) -> Result<Response> {
-    let mut staff_user_chirho: StaffUserChirho = req_chirho.json().await?;
+    let staff_user_chirho: StaffUserChirho = req_chirho.json().await?;
     let db_chirho = UserDbChirho::new(env_chirho.clone());
     let auth_chirho = AuthChirho::new(env_chirho);
 
@@ -34,7 +33,7 @@ pub async fn create_sponsor_user_handler_chirho(
     mut req_chirho: Request,
     env_chirho: Env,
 ) -> Result<Response> {
-    let mut sponsor_user_chirho: SponsorUserChirho = req_chirho.json().await?;
+    let sponsor_user_chirho: SponsorUserChirho = req_chirho.json().await?;
     let db_chirho = UserDbChirho::new(env_chirho.clone());
     let auth_chirho = AuthChirho::new(env_chirho);
 

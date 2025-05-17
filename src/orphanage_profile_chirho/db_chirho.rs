@@ -4,10 +4,9 @@
 
 use worker::D1Database;
 use wasm_bindgen::JsValue;
-use chrono::{DateTime, Utc};
 
 use crate::errors_chirho::ErrorChirho;
-use super::models_chirho::{OrphanageProfileChirho, OrphanageUpdateChirho, OrphanageVerificationChirho};
+use super::models_chirho::{OrphanageProfileChirho, OrphanageVerificationChirho};
 
 pub struct OrphanageDbChirho {
     pub db_chirho: D1Database,

@@ -1,17 +1,27 @@
 # For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.
 name = "open-orphanage-chirho"
 main = "src/lib.rs"
+type = "javascript"
+workers_dev = true
 compatibility_date = "2024-01-01"
 
 [build]
-command = "cargo build --target wasm32-unknown-unknown"
-cargo_manifest = "Cargo.toml"
+command = "cargo install -q worker-build && worker-build --release"
+# cargo_manifest = "Cargo.toml"
 watch_dir = "src"
 
 [build.upload]
-format = "service-worker"
+dir = "build/worker"
+format = "modules"
+main = "./shim.mjs"
+
+[[build.upload.rules]]
+globs = ["**/*.wasm"]
+type = "CompiledWasm"
+
 
 [vars]
+WORKERS_RS_VERSION = "0.5.0"
 ENVIRONMENT_CHIRHO = "development"
 
 [[d1_databases]]

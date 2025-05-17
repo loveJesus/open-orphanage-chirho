@@ -5,36 +5,41 @@ version = "0.1.0"
 edition = "2021"
 description = "OpenOrphanageChirho - A platform for managing orphanages and child sponsorship"
 
+[lib]
+crate-type = ["cdylib", "rlib"]
+
 [dependencies]
 worker = { version = "0.5.0", features = ["d1"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-uuid = { version = "1.7.0", features = ["v4", "serde"] }
+uuid = { version = "1.16.0", features = ["v4", "serde", "js"] }
 chrono = { version = "0.4", features = ["serde"] }
-jsonwebtoken = "9.2.0"
-argon2 = { version="0.5.3" , features = ["default"]}
+jsonwebtoken-rustcrypto = { version="~1.2.0" }
+argon2 = { version = "~0.5.3" }
 wasm-bindgen = { version = "~0.2.100", features = ["serde-serialize"] }
 wasm-bindgen-futures = "~0.4.50"
 regex = "~1.11.1"
-rand_core = { version="0.6.4", features = ["getrandom"] }
+rand_core = { version = "0.6.4", features = ["getrandom"] }
 web-sys = { version = "~0.3.77", features = [
     "Headers",
     "Request",
+    "RequestInit",
+    "RequestMode",
     "Response",
     "Window",
-    "console",
-    "Document",
-    "Element",
-    "HtmlElement",
-    "Node",
-    "Window",
-    "ResponseType"
+    "console"
 ]}
-password-hash = { version = "0.5"}
+getrandom = { version = "~0.2", features = ["js"] }
+
+#js-sys = "~0.3.77"
+#console_error_panic_hook = "0.1.7"
+#console_log = "1.0.0"
+#thiserror = "1.0.69"
 
 [dev-dependencies]
 tokio-test = "~0.4.4"
 mockall = "~0.12.1"
+
 
 [profile.release]
 opt-level = 3

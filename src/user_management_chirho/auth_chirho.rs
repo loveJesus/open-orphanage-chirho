@@ -4,14 +4,14 @@
 use worker::Env;
 use argon2::{
     password_hash::{
-        
+
         PasswordHash, PasswordHasher, PasswordVerifier, SaltString},
     Argon2,
 };
 
 use rand_core::OsRng;
 
-use jsonwebtoken::{encode, decode, Header, EncodingKey, DecodingKey, Validation};
+use jsonwebtoken_rustcrypto::{encode, decode, Header, EncodingKey, DecodingKey, Validation};
 use serde::{Serialize, Deserialize};
 use chrono::{Utc, Duration};
 
@@ -76,7 +76,7 @@ impl AuthChirho {
         encode(
             &Header::default(),
             &claims_chirho,
-            &EncodingKey::from_secret(self.jwt_secret_chirho.as_bytes()),
+            &EncodingKey::from_hmac_secret(self.jwt_secret_chirho.as_bytes()),
         )
         .map_err(|e| ErrorChirho::AuthErrorChirho(e.to_string()))
     }
@@ -84,7 +84,7 @@ impl AuthChirho {
     pub fn verify_token_chirho(&self, token_chirho: &str) -> Result<ClaimsChirho, ErrorChirho> {
         decode::<ClaimsChirho>(
             token_chirho,
-            &DecodingKey::from_secret(self.jwt_secret_chirho.as_bytes()),
+            &DecodingKey::from_hmac_secret(self.jwt_secret_chirho.as_bytes()),
             &Validation::default(),
         )
         .map(|data| data.claims)

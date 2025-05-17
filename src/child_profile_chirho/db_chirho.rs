@@ -4,7 +4,6 @@
 
 use worker::{D1Database};
 use wasm_bindgen::JsValue;
-use chrono::{DateTime, Utc};
 
 use crate::errors_chirho::ErrorChirho;
 use super::models_chirho::{ChildProfileChirho, ChildUpdateChirho};
