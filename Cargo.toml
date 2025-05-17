@@ -3,10 +3,11 @@
 name = "open-orphanage-chirho"
 version = "0.1.0"
 edition = "2021"
+authors = ["LoveJesus <loveJesus@loveJes.us"]
 description = "OpenOrphanageChirho - A platform for managing orphanages and child sponsorship"
 
 [lib]
-crate-type = ["cdylib", "rlib"]
+crate-type = ["cdylib"]
 
 [dependencies]
 worker = { version = "0.5.0", features = ["d1"] }
@@ -45,3 +46,10 @@ mockall = "~0.12.1"
 opt-level = 3
 lto = true
 codegen-units = 1
+
+[package.metadata.release]
+release = false
+
+# https://github.com/rustwasm/wasm-pack/issues/1247
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false
