@@ -19,6 +19,9 @@ main = "./shim.mjs"
 globs = ["**/*.wasm"]
 type = "CompiledWasm"
 
+[[module_rules]]
+type = "CompiledWasm"
+globs = ["**/*.wasm"]
 
 [vars]
 WORKERS_RS_VERSION = "0.5.0"
