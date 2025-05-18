@@ -48,6 +48,7 @@ OpenOrphanageChirho is an open-source platform designed to empower orphanages an
 2. **Build and run the backend:**
    ```sh
    npm install
+   npx wrangler d1 execute DB_CHIRHO --file=schema_chirho.sql
    npx wrangler dev
    ```
 3. **Configure Cloudflare Workers:**
