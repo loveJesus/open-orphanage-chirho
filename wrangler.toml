@@ -6,7 +6,7 @@ workers_dev = true
 compatibility_date = "2024-01-01"
 
 [build]
-command = "cargo install -q worker-build && worker-build --release"
+command = "cargo install -q worker-build && worker-build  --release"
 # cargo_manifest = "Cargo.toml"
 watch_dir = "src"
 

@@ -74,9 +74,9 @@ pub async fn post_child_update_handler_chirho(
 pub fn get_routes_chirho() -> Router<AxumStateChirho> {
     Router::new()
         .route("/api_chirho/v1_chirho/children_chirho", post(create_child_profile_handler_chirho))
-        .route("/api_chirho/v1_chirho/children_chirho/:child_id_chirho", get(get_child_profile_handler_chirho))
-        .route("/api_chirho/v1_chirho/orphanages_chirho/:orphanage_id_chirho/children_chirho", get(get_orphanage_children_handler_chirho))
-        .route("/api_chirho/v1_chirho/children_chirho/:child_id_chirho", put(update_child_profile_handler_chirho))
-        .route("/api_chirho/v1_chirho/children_chirho/:child_id_chirho", delete(delete_child_profile_handler_chirho))
-        .route("/api_chirho/v1_chirho/children_chirho/:child_id_chirho/updates_chirho", post(post_child_update_handler_chirho))
+        .route("/api_chirho/v1_chirho/children_chirho/{child_id_chirho}", get(get_child_profile_handler_chirho))
+        .route("/api_chirho/v1_chirho/orphanages_chirho/{orphanage_id_chirho}/children_chirho", get(get_orphanage_children_handler_chirho))
+        .route("/api_chirho/v1_chirho/children_chirho/{child_id_chirho}", put(update_child_profile_handler_chirho))
+        .route("/api_chirho/v1_chirho/children_chirho/{child_id_chirho}", delete(delete_child_profile_handler_chirho))
+        .route("/api_chirho/v1_chirho/children_chirho/{child_id_chirho}/updates_chirho", post(post_child_update_handler_chirho))
 } 

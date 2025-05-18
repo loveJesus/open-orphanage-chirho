@@ -29,7 +29,7 @@ pub async fn create_orphanage_profile_handler_chirho(
     profile_chirho.created_at_chirho = Utc::now();
     profile_chirho.updated_at_chirho = Utc::now();
 
-    let db_chirho = OrphanageDbChirho::new((*state_chirho.env_wrapper.env).d1("DB_CHIRHO").unwrap());
+    let db_chirho = OrphanageDbChirho::new((*state_chirho.env_wrapper_chirho.env).d1("DB_CHIRHO").unwrap());
     match db_chirho.create_orphanage_profile_chirho(profile_chirho.clone()).await {
         Ok(_) => (StatusCode::CREATED, Json(json!(profile_chirho))).into_response(),
         Err(error_chirho) => (StatusCode::INTERNAL_SERVER_ERROR, Json(json!({"error": error_chirho.to_string()}))).into_response(),
@@ -41,7 +41,7 @@ pub async fn get_orphanage_profile_handler_chirho(
     State(state_chirho): State<AxumStateChirho>,
     Path(orphanage_id_chirho): Path<String>,
 ) -> impl IntoResponse {
-    let db_chirho = OrphanageDbChirho::new((*state_chirho.env_wrapper.env).d1("DB_CHIRHO").unwrap());
+    let db_chirho = OrphanageDbChirho::new((*state_chirho.env_wrapper_chirho.env).d1("DB_CHIRHO").unwrap());
     match db_chirho.get_orphanage_profile_chirho(&orphanage_id_chirho).await {
         Ok(Some(profile_chirho)) => (StatusCode::OK, Json(json!(profile_chirho))).into_response(),
         Ok(None) => (StatusCode::NOT_FOUND, Json(json!({"error": "Orphanage profile not found"}))).into_response(),
@@ -55,7 +55,7 @@ pub async fn update_orphanage_profile_handler_chirho(
     Path(orphanage_id_chirho): Path<String>,
     Json(update_chirho): Json<OrphanageUpdateChirho>,
 ) -> impl IntoResponse {
-    let db_chirho = OrphanageDbChirho::new((*state_chirho.env_wrapper.env).d1("DB_CHIRHO").unwrap());
+    let db_chirho = OrphanageDbChirho::new((*state_chirho.env_wrapper_chirho.env).d1("DB_CHIRHO").unwrap());
     // Fetch existing profile
     match db_chirho.get_orphanage_profile_chirho(&orphanage_id_chirho).await {
         Ok(Some(mut profile_chirho)) => {
@@ -87,7 +87,7 @@ pub async fn delete_orphanage_profile_handler_chirho(
     State(state_chirho): State<AxumStateChirho>,
     Path(orphanage_id_chirho): Path<String>,
 ) -> impl IntoResponse {
-    let db_chirho = OrphanageDbChirho::new((*state_chirho.env_wrapper.env).d1("DB_CHIRHO").unwrap());
+    let db_chirho = OrphanageDbChirho::new((*state_chirho.env_wrapper_chirho.env).d1("DB_CHIRHO").unwrap());
     match db_chirho.delete_orphanage_profile_chirho(&orphanage_id_chirho).await {
         Ok(_) => (StatusCode::OK, Json(json!({"message": "Orphanage profile deleted successfully"}))).into_response(),
         Err(error_chirho) => (StatusCode::INTERNAL_SERVER_ERROR, Json(json!({"error": error_chirho.to_string()}))).into_response(),
@@ -103,7 +103,7 @@ pub async fn verify_orphanage_handler_chirho(
     verification_chirho.orphanage_id_chirho = orphanage_id_chirho;
     verification_chirho.verification_date_chirho = Utc::now();
 
-    let db_chirho = OrphanageDbChirho::new((*state_chirho.env_wrapper.env).d1("DB_CHIRHO").unwrap());
+    let db_chirho = OrphanageDbChirho::new((*state_chirho.env_wrapper_chirho.env).d1("DB_CHIRHO").unwrap());
     match db_chirho.verify_orphanage_chirho(verification_chirho.clone()).await {
         Ok(_) => (StatusCode::OK, Json(json!(verification_chirho))).into_response(),
         Err(error_chirho) => (StatusCode::INTERNAL_SERVER_ERROR, Json(json!({"error": error_chirho.to_string()}))).into_response(),
@@ -113,8 +113,8 @@ pub async fn verify_orphanage_handler_chirho(
 pub fn get_routes_chirho() -> Router<AxumStateChirho> {
     Router::new()
         .route("/api_chirho/v1_chirho/orphanages_chirho", post(create_orphanage_profile_handler_chirho))
-        .route("/api_chirho/v1_chirho/orphanages_chirho/:orphanage_id_chirho", get(get_orphanage_profile_handler_chirho))
-        .route("/api_chirho/v1_chirho/orphanages_chirho/:orphanage_id_chirho", put(update_orphanage_profile_handler_chirho))
-        .route("/api_chirho/v1_chirho/orphanages_chirho/:orphanage_id_chirho", delete(delete_orphanage_profile_handler_chirho))
-        .route("/api_chirho/v1_chirho/orphanages_chirho/:orphanage_id_chirho/verify_chirho", post(verify_orphanage_handler_chirho))
+        .route("/api_chirho/v1_chirho/orphanages_chirho/{orphanage_id_chirho}", get(get_orphanage_profile_handler_chirho))
+        .route("/api_chirho/v1_chirho/orphanages_chirho/{orphanage_id_chirho}", put(update_orphanage_profile_handler_chirho))
+        .route("/api_chirho/v1_chirho/orphanages_chirho/{orphanage_id_chirho}", delete(delete_orphanage_profile_handler_chirho))
+        .route("/api_chirho/v1_chirho/orphanages_chirho/{orphanage_id_chirho}/verify_chirho", post(verify_orphanage_handler_chirho))
 } 

@@ -886,6 +886,8 @@ dependencies = [
  "argon2",
  "axum",
  "axum-cloudflare-adapter",
+ "axum-wasm-macros",
+ "cfg-if",
  "chrono",
  "getrandom 0.2.16",
  "js-sys",

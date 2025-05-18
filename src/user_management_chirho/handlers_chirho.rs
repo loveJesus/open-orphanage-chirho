@@ -39,14 +39,14 @@ pub async fn create_staff_user_handler_chirho(
     user_chirho.created_at_chirho = Utc::now();
     user_chirho.updated_at_chirho = Utc::now();
 
-    let auth_chirho = AuthChirho::new((*state_chirho.env_wrapper.env).clone());
+    let auth_chirho = AuthChirho::new((*state_chirho.env_wrapper_chirho.env).clone());
     let hashed_password_chirho = match auth_chirho.hash_password_chirho(&user_chirho.hashed_password_chirho) {
         Ok(hash_chirho) => hash_chirho,
         Err(error_chirho) => return (StatusCode::INTERNAL_SERVER_ERROR, Json(json!({"error": error_chirho.to_string()}))).into_response(),
     };
     user_chirho.hashed_password_chirho = hashed_password_chirho;
 
-    let db_chirho = UserDbChirho::new((*state_chirho.env_wrapper.env).clone());
+    let db_chirho = UserDbChirho::new((*state_chirho.env_wrapper_chirho.env).clone());
     match db_chirho.create_staff_user_chirho(user_chirho.clone()).await {
         Ok(_) => (StatusCode::CREATED, Json(json!(user_chirho))).into_response(),
         Err(error_chirho) => (StatusCode::INTERNAL_SERVER_ERROR, Json(json!({"error": error_chirho.to_string()}))).into_response(),
@@ -63,14 +63,14 @@ pub async fn create_sponsor_user_handler_chirho(
     user_chirho.created_at_chirho = Utc::now();
     user_chirho.updated_at_chirho = Utc::now();
 
-    let auth_chirho = AuthChirho::new((*state_chirho.env_wrapper.env).clone());
+    let auth_chirho = AuthChirho::new((*state_chirho.env_wrapper_chirho.env).clone());
     let hashed_password_chirho = match auth_chirho.hash_password_chirho(&user_chirho.hashed_password_chirho) {
         Ok(hash_chirho) => hash_chirho,
         Err(error_chirho) => return (StatusCode::INTERNAL_SERVER_ERROR, Json(json!({"error": error_chirho.to_string()}))).into_response(),
     };
     user_chirho.hashed_password_chirho = hashed_password_chirho;
 
-    let db_chirho = UserDbChirho::new((*state_chirho.env_wrapper.env).clone());
+    let db_chirho = UserDbChirho::new((*state_chirho.env_wrapper_chirho.env).clone());
     match db_chirho.create_sponsor_user_chirho(user_chirho.clone()).await {
         Ok(_) => (StatusCode::CREATED, Json(json!(user_chirho))).into_response(),
         Err(error_chirho) => (StatusCode::INTERNAL_SERVER_ERROR, Json(json!({"error": error_chirho.to_string()}))).into_response(),
@@ -82,8 +82,8 @@ pub async fn login_handler_chirho(
     State(state_chirho): State<AxumStateChirho>,
     Json(login_request_chirho): Json<LoginRequestChirho>,
 ) -> impl IntoResponse {
-    let db_chirho = UserDbChirho::new((*state_chirho.env_wrapper.env).clone());
-    let auth_chirho = AuthChirho::new((*state_chirho.env_wrapper.env).clone());
+    let db_chirho = UserDbChirho::new((*state_chirho.env_wrapper_chirho.env).clone());
+    let auth_chirho = AuthChirho::new((*state_chirho.env_wrapper_chirho.env).clone());
 
     // Try to find the user in staff users first
     match db_chirho.get_staff_user_by_email_chirho(&login_request_chirho.email_chirho).await {
