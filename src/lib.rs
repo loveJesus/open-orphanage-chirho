@@ -63,9 +63,18 @@ pub async fn index_chirho(State(_state_chirho): State<AxumStateChirho>) -> impl 
         .unwrap()
 }
 
+#[wasm_compat]
+pub async fn simple_test_chirho(State(_state_chirho): State<AxumStateChirho>) -> impl IntoResponse {
+    (StatusCode::OK, Json(json!({
+        "message": "Hallelujah, Simple test endpoint working",
+        "status": "success"
+    })))
+}
+
 pub fn get_routes_chirho() -> AxumRouter<AxumStateChirho> {
     AxumRouter::new()
         .route("/", get(index_chirho))
+        .route("/api_chirho/v1_chirho/test_chirho", get(simple_test_chirho))
         .merge(get_user_routes_chirho())
         .merge(get_orphanage_routes_chirho())
         .merge(get_child_routes_chirho())

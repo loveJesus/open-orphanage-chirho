@@ -12,9 +12,11 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240208.0",
+    "@miniflare/shared": "^2.14.4",
     "@types/node": "^20.17.47",
-    "miniflare": "^3.20240208.0",
+    "miniflare": "^3.20250408.1",
     "typescript": "^5.3.3",
+    "uuid": "^11.1.0",
     "vitest": "^1.6.1",
     "wrangler": "^4.15.2"
   },

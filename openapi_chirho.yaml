@@ -221,11 +221,8 @@ components:
         - given_name_chirho
         - date_of_birth_chirho
         - gender_chirho
-        - enrollment_date_chirho
-        - story_summary_chirho
+        - education_level_chirho
         - sponsorship_status_chirho
-        - educational_level_chirho
-        - health_status_summary_chirho
       properties:
         child_id_chirho:
           type: string
@@ -241,21 +238,13 @@ components:
         gender_chirho:
           type: string
           enum: [male_chirho, female_chirho, other_chirho]
-        enrollment_date_chirho:
+        medical_history_chirho:
           type: string
-          format: date
-        story_summary_chirho:
+        education_level_chirho:
           type: string
         sponsorship_status_chirho:
           type: string
           enum: [available_chirho, partially_sponsored_chirho, fully_sponsored_chirho]
-        photo_url_main_chirho:
-          type: string
-          format: uri
-        educational_level_chirho:
-          type: string
-        health_status_summary_chirho:
-          type: string
         created_at_chirho:
           type: string
           format: date-time
