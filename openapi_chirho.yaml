@@ -1,0 +1,1959 @@
+openapi: 3.0.0
+info:
+  title: OpenOrphanageChirho API
+  description: |
+    API for managing orphanages, children, sponsorships, and related operations.
+    For God so loved the world, that he gave his only begotten Son,
+    that all who believe in Him should not perish but have everlasting life.
+    John 3:16 (KJV)
+  version: 1.0.0
+  contact:
+    name: OpenOrphanageChirho Support
+    email: support@openorphanagechirho.org
+
+servers:
+  - url: https://api.openorphanagechirho.org/api_chirho/v1_chirho
+    description: Production server
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    ErrorResponseChirho:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+
+    StaffUserChirho:
+      type: object
+      required:
+        - user_id_chirho
+        - email_chirho
+        - first_name_chirho
+        - last_name_chirho
+        - role_chirho
+        - orphanage_id_chirho
+      properties:
+        user_id_chirho:
+          type: string
+          format: uuid
+        email_chirho:
+          type: string
+          format: email
+        first_name_chirho:
+          type: string
+        last_name_chirho:
+          type: string
+        role_chirho:
+          type: string
+          enum: [admin_chirho, staff_chirho]
+        orphanage_id_chirho:
+          type: string
+          format: uuid
+        created_at_chirho:
+          type: string
+          format: date-time
+        updated_at_chirho:
+          type: string
+          format: date-time
+
+    SponsorUserChirho:
+      type: object
+      required:
+        - user_id_chirho
+        - email_chirho
+        - first_name_chirho
+        - last_name_chirho
+      properties:
+        user_id_chirho:
+          type: string
+          format: uuid
+        email_chirho:
+          type: string
+          format: email
+        first_name_chirho:
+          type: string
+        last_name_chirho:
+          type: string
+        created_at_chirho:
+          type: string
+          format: date-time
+        updated_at_chirho:
+          type: string
+          format: date-time
+
+    LoginRequestChirho:
+      type: object
+      required:
+        - email_chirho
+        - password_chirho
+      properties:
+        email_chirho:
+          type: string
+          format: email
+        password_chirho:
+          type: string
+          format: password
+
+    LoginResponseChirho:
+      type: object
+      required:
+        - token_chirho
+        - user_id_chirho
+        - role_chirho
+      properties:
+        token_chirho:
+          type: string
+        user_id_chirho:
+          type: string
+          format: uuid
+        role_chirho:
+          type: string
+          enum: [admin_chirho, staff_chirho, sponsor_chirho]
+
+    OrphanageProfileChirho:
+      type: object
+      required:
+        - orphanage_id_chirho
+        - name_chirho
+        - description_chirho
+        - address_chirho
+        - contact_email_chirho
+        - capacity_chirho
+        - current_children_count_chirho
+        - founded_date_chirho
+        - registration_number_chirho
+      properties:
+        orphanage_id_chirho:
+          type: string
+          format: uuid
+        name_chirho:
+          type: string
+        description_chirho:
+          type: string
+        address_chirho:
+          type: string
+        contact_email_chirho:
+          type: string
+          format: email
+        contact_phone_chirho:
+          type: string
+        website_url_chirho:
+          type: string
+          format: uri
+        capacity_chirho:
+          type: integer
+          minimum: 0
+        current_children_count_chirho:
+          type: integer
+          minimum: 0
+        founded_date_chirho:
+          type: string
+          format: date
+        registration_number_chirho:
+          type: string
+        created_at_chirho:
+          type: string
+          format: date-time
+        updated_at_chirho:
+          type: string
+          format: date-time
+
+    OrphanageUpdateChirho:
+      type: object
+      properties:
+        name_chirho:
+          type: string
+        description_chirho:
+          type: string
+        address_chirho:
+          type: string
+        contact_email_chirho:
+          type: string
+          format: email
+        contact_phone_chirho:
+          type: string
+        website_url_chirho:
+          type: string
+          format: uri
+        capacity_chirho:
+          type: integer
+          minimum: 0
+        current_children_count_chirho:
+          type: integer
+          minimum: 0
+        founded_date_chirho:
+          type: string
+          format: date
+        registration_number_chirho:
+          type: string
+
+    OrphanageVerificationChirho:
+      type: object
+      required:
+        - orphanage_id_chirho
+        - verification_date_chirho
+        - verified_by_chirho
+      properties:
+        orphanage_id_chirho:
+          type: string
+          format: uuid
+        verification_date_chirho:
+          type: string
+          format: date-time
+        verified_by_chirho:
+          type: string
+          format: uuid
+        verification_notes_chirho:
+          type: string
+
+    ChildProfileChirho:
+      type: object
+      required:
+        - child_id_chirho
+        - orphanage_id_chirho
+        - given_name_chirho
+        - date_of_birth_chirho
+        - gender_chirho
+        - enrollment_date_chirho
+        - story_summary_chirho
+        - sponsorship_status_chirho
+        - educational_level_chirho
+        - health_status_summary_chirho
+      properties:
+        child_id_chirho:
+          type: string
+          format: uuid
+        orphanage_id_chirho:
+          type: string
+          format: uuid
+        given_name_chirho:
+          type: string
+        date_of_birth_chirho:
+          type: string
+          format: date
+        gender_chirho:
+          type: string
+          enum: [male_chirho, female_chirho, other_chirho]
+        enrollment_date_chirho:
+          type: string
+          format: date
+        story_summary_chirho:
+          type: string
+        sponsorship_status_chirho:
+          type: string
+          enum: [available_chirho, partially_sponsored_chirho, fully_sponsored_chirho]
+        photo_url_main_chirho:
+          type: string
+          format: uri
+        educational_level_chirho:
+          type: string
+        health_status_summary_chirho:
+          type: string
+        created_at_chirho:
+          type: string
+          format: date-time
+        updated_at_chirho:
+          type: string
+          format: date-time
+
+    ChildUpdateChirho:
+      type: object
+      required:
+        - update_id_chirho
+        - child_id_chirho
+        - staff_user_id_chirho
+        - update_text_chirho
+        - date_posted_chirho
+        - visibility_chirho
+      properties:
+        update_id_chirho:
+          type: string
+          format: uuid
+        child_id_chirho:
+          type: string
+          format: uuid
+        staff_user_id_chirho:
+          type: string
+          format: uuid
+        update_text_chirho:
+          type: string
+        date_posted_chirho:
+          type: string
+          format: date-time
+        visibility_chirho:
+          type: string
+          enum: [sponsors_only_chirho, internal_chirho]
+
+    SponsorshipChirho:
+      type: object
+      required:
+        - sponsorship_id_chirho
+        - sponsor_user_id_chirho
+        - child_id_chirho
+        - sponsorship_level_chirho
+        - monthly_amount_chirho
+        - start_date_chirho
+        - is_active_chirho
+        - payment_status_chirho
+      properties:
+        sponsorship_id_chirho:
+          type: string
+          format: uuid
+        sponsor_user_id_chirho:
+          type: string
+          format: uuid
+        child_id_chirho:
+          type: string
+          format: uuid
+        sponsorship_level_chirho:
+          type: string
+          enum: [full_chirho, partial_chirho]
+        monthly_amount_chirho:
+          type: number
+          format: float
+          minimum: 0
+        start_date_chirho:
+          type: string
+          format: date
+        end_date_chirho:
+          type: string
+          format: date
+        is_active_chirho:
+          type: boolean
+        payment_status_chirho:
+          type: string
+          enum: [active_chirho, pending_chirho, failed_chirho, cancelled_chirho]
+        created_at_chirho:
+          type: string
+          format: date-time
+        updated_at_chirho:
+          type: string
+          format: date-time
+
+    SponsorshipUpdateChirho:
+      type: object
+      properties:
+        sponsorship_level_chirho:
+          type: string
+          enum: [full_chirho, partial_chirho]
+        monthly_amount_chirho:
+          type: number
+          format: float
+          minimum: 0
+        end_date_chirho:
+          type: string
+          format: date
+        is_active_chirho:
+          type: boolean
+        payment_status_chirho:
+          type: string
+          enum: [active_chirho, pending_chirho, failed_chirho, cancelled_chirho]
+
+    GeneralDonationChirho:
+      type: object
+      required:
+        - donation_id_chirho
+        - amount_chirho
+        - donation_date_chirho
+        - payment_transaction_id_chirho
+        - status_chirho
+      properties:
+        donation_id_chirho:
+          type: string
+          format: uuid
+        donor_user_id_chirho:
+          type: string
+          format: uuid
+        guest_donor_email_chirho:
+          type: string
+          format: email
+        amount_chirho:
+          type: number
+          format: float
+          minimum: 0
+        donation_date_chirho:
+          type: string
+          format: date-time
+        target_orphanage_id_chirho:
+          type: string
+          format: uuid
+        target_need_id_chirho:
+          type: string
+          format: uuid
+        payment_transaction_id_chirho:
+          type: string
+        status_chirho:
+          type: string
+          enum: [pending_chirho, completed_chirho, failed_chirho, refunded_chirho]
+        created_at_chirho:
+          type: string
+          format: date-time
+        updated_at_chirho:
+          type: string
+          format: date-time
+
+    DonationUpdateChirho:
+      type: object
+      properties:
+        amount_chirho:
+          type: number
+          format: float
+          minimum: 0
+        target_orphanage_id_chirho:
+          type: string
+          format: uuid
+        target_need_id_chirho:
+          type: string
+          format: uuid
+        status_chirho:
+          type: string
+          enum: [pending_chirho, completed_chirho, failed_chirho, refunded_chirho]
+
+    NeedItemChirho:
+      type: object
+      required:
+        - need_id_chirho
+        - orphanage_id_chirho
+        - item_name_chirho
+        - description_chirho
+        - quantity_needed_chirho
+        - quantity_fulfilled_chirho
+        - urgency_level_chirho
+        - status_chirho
+        - posted_by_staff_id_chirho
+      properties:
+        need_id_chirho:
+          type: string
+          format: uuid
+        orphanage_id_chirho:
+          type: string
+          format: uuid
+        item_name_chirho:
+          type: string
+        description_chirho:
+          type: string
+        quantity_needed_chirho:
+          type: integer
+          minimum: 1
+        quantity_fulfilled_chirho:
+          type: integer
+          minimum: 0
+        urgency_level_chirho:
+          type: string
+          enum: [high_chirho, medium_chirho, low_chirho]
+        status_chirho:
+          type: string
+          enum: [open_chirho, fulfilled_chirho, in_progress_chirho]
+        posted_by_staff_id_chirho:
+          type: string
+          format: uuid
+        created_at_chirho:
+          type: string
+          format: date-time
+        updated_at_chirho:
+          type: string
+          format: date-time
+
+    NeedItemUpdateChirho:
+      type: object
+      properties:
+        item_name_chirho:
+          type: string
+        description_chirho:
+          type: string
+        quantity_needed_chirho:
+          type: integer
+          minimum: 1
+        quantity_fulfilled_chirho:
+          type: integer
+          minimum: 0
+        urgency_level_chirho:
+          type: string
+          enum: [high_chirho, medium_chirho, low_chirho]
+        status_chirho:
+          type: string
+          enum: [open_chirho, fulfilled_chirho, in_progress_chirho]
+
+    MessageChirho:
+      type: object
+      required:
+        - message_id_chirho
+        - sponsorship_id_chirho
+        - sender_user_id_chirho
+        - receiver_child_id_chirho
+        - message_text_chirho
+        - sent_at_chirho
+        - read_status_chirho
+        - moderation_status_chirho
+      properties:
+        message_id_chirho:
+          type: string
+          format: uuid
+        sponsorship_id_chirho:
+          type: string
+          format: uuid
+        sender_user_id_chirho:
+          type: string
+          format: uuid
+        receiver_child_id_chirho:
+          type: string
+          format: uuid
+        message_text_chirho:
+          type: string
+        sent_at_chirho:
+          type: string
+          format: date-time
+        read_status_chirho:
+          type: boolean
+        moderation_status_chirho:
+          type: string
+          enum: [pending_chirho, approved_chirho, rejected_chirho]
+        moderator_staff_user_id_chirho:
+          type: string
+          format: uuid
+        created_at_chirho:
+          type: string
+          format: date-time
+        updated_at_chirho:
+          type: string
+          format: date-time
+
+    MessageUpdateChirho:
+      type: object
+      properties:
+        message_text_chirho:
+          type: string
+        read_status_chirho:
+          type: boolean
+        moderation_status_chirho:
+          type: string
+          enum: [pending_chirho, approved_chirho, rejected_chirho]
+        moderator_staff_user_id_chirho:
+          type: string
+          format: uuid
+
+paths:
+  /users_chirho/staff_chirho:
+    post:
+      summary: Create a new staff user
+      description: Creates a new staff user account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StaffUserChirho'
+      responses:
+        '201':
+          description: Staff user created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StaffUserChirho'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /users_chirho/sponsor_chirho:
+    post:
+      summary: Create a new sponsor user
+      description: Creates a new sponsor user account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SponsorUserChirho'
+      responses:
+        '201':
+          description: Sponsor user created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SponsorUserChirho'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /login_chirho:
+    post:
+      summary: User login
+      description: Authenticates a user and returns a JWT token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequestChirho'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponseChirho'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /orphanages_chirho:
+    post:
+      summary: Create a new orphanage profile
+      description: Creates a new orphanage profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrphanageProfileChirho'
+      responses:
+        '201':
+          description: Orphanage profile created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrphanageProfileChirho'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /orphanages_chirho/{orphanage_id_chirho}:
+    get:
+      summary: Get orphanage profile
+      description: Retrieves an orphanage profile by ID
+      parameters:
+        - name: orphanage_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Orphanage profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrphanageProfileChirho'
+        '404':
+          description: Orphanage profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+    put:
+      summary: Update orphanage profile
+      description: Updates an existing orphanage profile
+      parameters:
+        - name: orphanage_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrphanageUpdateChirho'
+      responses:
+        '200':
+          description: Orphanage profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrphanageProfileChirho'
+        '404':
+          description: Orphanage profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+    delete:
+      summary: Delete orphanage profile
+      description: Deletes an orphanage profile
+      parameters:
+        - name: orphanage_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Orphanage profile deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Orphanage profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /orphanages_chirho/{orphanage_id_chirho}/verify_chirho:
+    post:
+      summary: Verify orphanage
+      description: Verifies an orphanage profile
+      parameters:
+        - name: orphanage_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrphanageVerificationChirho'
+      responses:
+        '200':
+          description: Orphanage verified successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrphanageVerificationChirho'
+        '404':
+          description: Orphanage profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /children_chirho:
+    post:
+      summary: Create a new child profile
+      description: Creates a new child profile in the system
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChildProfileChirho'
+      responses:
+        '201':
+          description: Child profile created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChildProfileChirho'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /children_chirho/{child_id_chirho}:
+    get:
+      summary: Get child profile
+      description: Retrieves a child profile by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: child_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Child profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChildProfileChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '404':
+          description: Child profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+    put:
+      summary: Update child profile
+      description: Updates an existing child profile
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: child_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChildProfileChirho'
+      responses:
+        '200':
+          description: Child profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChildProfileChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '404':
+          description: Child profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+    delete:
+      summary: Delete child profile
+      description: Deletes a child profile
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: child_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Child profile deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '404':
+          description: Child profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /orphanages_chirho/{orphanage_id_chirho}/children_chirho:
+    get:
+      summary: Get orphanage children
+      description: Retrieves all children profiles for a specific orphanage
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: orphanage_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: List of children profiles retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChildProfileChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '404':
+          description: Orphanage not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /children_chirho/{child_id_chirho}/updates_chirho:
+    post:
+      summary: Create child update
+      description: Creates a new update for a child profile
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: child_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChildUpdateChirho'
+      responses:
+        '201':
+          description: Child update created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChildUpdateChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '404':
+          description: Child profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /sponsorships_chirho:
+    post:
+      summary: Create a new sponsorship
+      description: Creates a new sponsorship relationship between a sponsor and a child
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SponsorshipChirho'
+      responses:
+        '201':
+          description: Sponsorship created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SponsorshipChirho'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '409':
+          description: Child already fully sponsored
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /sponsorships_chirho/{sponsorship_id_chirho}:
+    get:
+      summary: Get sponsorship details
+      description: Retrieves details of a specific sponsorship
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: sponsorship_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Sponsorship details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SponsorshipChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '404':
+          description: Sponsorship not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+    put:
+      summary: Update sponsorship
+      description: Updates an existing sponsorship
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: sponsorship_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SponsorshipUpdateChirho'
+      responses:
+        '200':
+          description: Sponsorship updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SponsorshipChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '404':
+          description: Sponsorship not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+    delete:
+      summary: Cancel sponsorship
+      description: Cancels an active sponsorship
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: sponsorship_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Sponsorship cancelled successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '404':
+          description: Sponsorship not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /sponsors_chirho/{sponsor_id_chirho}/sponsorships_chirho:
+    get:
+      summary: Get sponsor's sponsorships
+      description: Retrieves all sponsorships for a specific sponsor
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: sponsor_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: List of sponsorships retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SponsorshipChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '404':
+          description: Sponsor not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /children_chirho/{child_id_chirho}/sponsorships_chirho:
+    get:
+      summary: Get child's sponsorships
+      description: Retrieves all sponsorships for a specific child
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: child_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: List of sponsorships retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SponsorshipChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '404':
+          description: Child not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /donations_chirho:
+    post:
+      summary: Create a new donation
+      description: Creates a new donation record
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GeneralDonationChirho'
+      responses:
+        '201':
+          description: Donation created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralDonationChirho'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /donations_chirho/{donation_id_chirho}:
+    get:
+      summary: Get donation details
+      description: Retrieves details of a specific donation
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: donation_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Donation details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralDonationChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '404':
+          description: Donation not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+    put:
+      summary: Update donation
+      description: Updates an existing donation record
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: donation_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DonationUpdateChirho'
+      responses:
+        '200':
+          description: Donation updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralDonationChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '404':
+          description: Donation not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /orphanages_chirho/{orphanage_id_chirho}/donations_chirho:
+    get:
+      summary: Get orphanage donations
+      description: Retrieves all donations for a specific orphanage
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: orphanage_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: List of donations retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GeneralDonationChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '404':
+          description: Orphanage not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /needs_chirho/{need_id_chirho}/donations_chirho:
+    get:
+      summary: Get need donations
+      description: Retrieves all donations for a specific need
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: need_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: List of donations retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GeneralDonationChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '404':
+          description: Need not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /donors_chirho/{donor_id_chirho}/donations_chirho:
+    get:
+      summary: Get donor's donations
+      description: Retrieves all donations made by a specific donor
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: donor_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: List of donations retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GeneralDonationChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '404':
+          description: Donor not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /needs_chirho:
+    post:
+      summary: Create a new need item
+      description: Creates a new need item for an orphanage
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NeedItemChirho'
+      responses:
+        '201':
+          description: Need item created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NeedItemChirho'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /needs_chirho/{need_id_chirho}:
+    get:
+      summary: Get need item details
+      description: Retrieves details of a specific need item
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: need_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Need item details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NeedItemChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '404':
+          description: Need item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+    put:
+      summary: Update need item
+      description: Updates an existing need item
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: need_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NeedItemUpdateChirho'
+      responses:
+        '200':
+          description: Need item updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NeedItemChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '404':
+          description: Need item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+    delete:
+      summary: Delete need item
+      description: Deletes a need item
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: need_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Need item deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '404':
+          description: Need item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /orphanages_chirho/{orphanage_id_chirho}/needs_chirho:
+    get:
+      summary: Get orphanage needs
+      description: Retrieves all need items for a specific orphanage
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: orphanage_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: status_chirho
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [open_chirho, fulfilled_chirho, in_progress_chirho]
+        - name: urgency_level_chirho
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [high_chirho, medium_chirho, low_chirho]
+      responses:
+        '200':
+          description: List of need items retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NeedItemChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '404':
+          description: Orphanage not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /messages_chirho:
+    post:
+      summary: Create a new message
+      description: Creates a new message between a sponsor and a child (via staff moderation)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageChirho'
+      responses:
+        '201':
+          description: Message created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageChirho'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /messages_chirho/{message_id_chirho}:
+    get:
+      summary: Get message details
+      description: Retrieves details of a specific message
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: message_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Message details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '404':
+          description: Message not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+    put:
+      summary: Update message
+      description: Updates an existing message (e.g., moderation status, read status)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: message_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageUpdateChirho'
+      responses:
+        '200':
+          description: Message updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '404':
+          description: Message not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /sponsorships_chirho/{sponsorship_id_chirho}/messages_chirho:
+    get:
+      summary: Get sponsorship messages
+      description: Retrieves all messages for a specific sponsorship
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: sponsorship_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: moderation_status_chirho
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [pending_chirho, approved_chirho, rejected_chirho]
+        - name: read_status_chirho
+          in: query
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: List of messages retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '404':
+          description: Sponsorship not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+
+  /orphanages_chirho/{orphanage_id_chirho}/messages_chirho/pending_chirho:
+    get:
+      summary: Get pending messages
+      description: Retrieves all pending messages for an orphanage that need moderation
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: orphanage_id_chirho
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: List of pending messages retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageChirho'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '404':
+          description: Orphanage not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseChirho' 

@@ -55,9 +55,10 @@ Path: `src/user_management_chirho/`
 ---
 
 1.  **Data Structures**:
-    -   `struct StaffUserChirho`: `user_id_chirho` (UUID), `orphanage_id_chirho` (FK), `email_chirho` (unique), `hashed_password_chirho`, `full_name_chirho`, `role_chirho` (e.g., "Admin", "Staff"), `created_at_chirho`, `updated_at_chirho`.
-    -   `struct SponsorUserChirho`: `user_id_chirho` (UUID), `email_chirho` (unique), `hashed_password_chirho`, `full_name_chirho`, `address_chirho` (optional), `payment_method_details_placeholder_chirho`, `created_at_chirho`, `updated_at_chirho`.
-    -   `struct PlatformAdminChirho`: `user_id_chirho` (UUID), `email_chirho` (unique), `hashed_password_chirho`, `full_name_chirho`, `created_at_chirho`, `updated_at_chirho`.
+    -   `struct StaffUserChirho`: `user_id_chirho` (UUID), `orphanage_id_chirho` (FK), `email_chirho` (unique), `hashed_password_chirho`, `first_name_chirho`, `last_name_chirho`, `role_chirho` (e.g., "admin_chirho", "staff_chirho"), `created_at_chirho`, `updated_at_chirho`.
+    -   `struct SponsorUserChirho`: `user_id_chirho` (UUID), `email_chirho` (unique), `hashed_password_chirho`, `first_name_chirho`, `last_name_chirho`, `created_at_chirho`, `updated_at_chirho`.
+    -   `struct PlatformAdminChirho`: `user_id_chirho` (UUID), `email_chirho` (unique), `hashed_password_chirho`, `first_name_chirho`, `last_name_chirho`, `created_at_chirho`, `updated_at_chirho`.
+    -   `struct LoginResponseChirho`: `token_chirho` (JWT), `user_id_chirho`, `role_chirho`.
 
 2.  **Functionality**:
     -   Registration for `StaffUserChirho` (potentially initiated by `PlatformAdminChirho` or a verified orphanage admin) and `SponsorUserChirho`.
@@ -81,7 +82,8 @@ Path: `src/orphanage_profile_chirho/`
 ---
 
 1.  **Data Structures**:
-    -   `struct OrphanageProfileChirho`: `orphanage_id_chirho` (UUID), `name_chirho`, `location_address_chirho`, `country_chirho`, `mission_statement_chirho`, `contact_email_chirho`, `phone_number_chirho` (optional), `website_url_chirho` (optional), `is_verified_chirho` (bool, managed by `PlatformAdminChirho`), `created_at_chirho`, `updated_at_chirho`.
+    -   `struct OrphanageProfileChirho`: `orphanage_id_chirho` (UUID), `name_chirho`, `description_chirho`, `address_chirho`, `contact_email_chirho`, `contact_phone_chirho`, `website_url_chirho` (optional), `capacity_chirho`, `current_children_count_chirho`, `founded_date_chirho`, `registration_number_chirho`, `created_at_chirho`, `updated_at_chirho`.
+    -   `struct OrphanageVerificationChirho`: `orphanage_id_chirho`, `verified_by_chirho`, `verification_date_chirho`, `verification_notes_chirho` (optional).
     -   Associated `StaffUserChirho` will link via `orphanage_id_chirho`.
 
 2.  **Functionality**:
@@ -103,8 +105,8 @@ Path: `src/child_profile_chirho/`
 ---
 
 1.  **Data Structures**:
-    -   `struct ChildProfileChirho`: `child_id_chirho` (UUID), `orphanage_id_chirho` (FK), `given_name_chirho` (or pseudonym if required by privacy policy), `date_of_birth_chirho`, `gender_chirho`, `enrollment_date_chirho`, `story_summary_chirho` (non-identifying details for public view, carefully curated), `sponsorship_status_chirho` (e.g., "Available", "PartiallySponsored", "FullySponsored"), `photo_url_main_chirho` (optional, requires strict consent and privacy handling; consider placeholders), `educational_level_chirho`, `health_status_summary_chirho` (general, non-detailed), `created_at_chirho`, `updated_at_chirho`.
-    -   `struct ChildUpdateChirho`: `update_id_chirho` (UUID), `child_id_chirho` (FK), `staff_user_id_chirho` (FK, author), `update_text_chirho`, `date_posted_chirho`, `visibility_chirho` (e.g., "SponsorsOnly", "Internal").
+    -   `struct ChildProfileChirho`: `child_id_chirho` (UUID), `orphanage_id_chirho` (FK), `given_name_chirho`, `date_of_birth_chirho`, `gender_chirho`, `enrollment_date_chirho`, `story_summary_chirho`, `sponsorship_status_chirho` (e.g., "available_chirho", "partially_sponsored_chirho", "fully_sponsored_chirho"), `photo_url_main_chirho` (optional), `educational_level_chirho`, `health_status_summary_chirho`, `created_at_chirho`, `updated_at_chirho`.
+    -   `struct ChildUpdateChirho`: `update_id_chirho` (UUID), `child_id_chirho` (FK), `staff_user_id_chirho` (FK, author), `update_text_chirho`, `date_posted_chirho`, `visibility_chirho` (e.g., "sponsors_only_chirho", "internal_chirho").
 
 2.  **Functionality**:
     -   CRUD API endpoints for `ChildProfileChirho`. Managed by `StaffUserChirho` of the respective orphanage.
@@ -125,7 +127,7 @@ Path: `src/sponsorship_chirho/`
 ---
 
 1.  **Data Structures**:
-    -   `struct SponsorshipChirho`: `sponsorship_id_chirho` (UUID), `sponsor_user_id_chirho` (FK), `child_id_chirho` (FK), `sponsorship_level_chirho` (e.g., "Full", "Partial"), `monthly_amount_chirho`, `start_date_chirho`, `end_date_chirho` (optional), `is_active_chirho` (bool), `payment_status_chirho`, `created_at_chirho`.
+    -   `struct SponsorshipChirho`: `sponsorship_id_chirho` (UUID), `sponsor_user_id_chirho` (FK), `child_id_chirho` (FK), `sponsorship_level_chirho` (e.g., "full_chirho", "partial_chirho"), `monthly_amount_chirho`, `start_date_chirho`, `end_date_chirho` (optional), `is_active_chirho` (bool), `payment_status_chirho` (e.g., "active_chirho", "pending_chirho", "failed_chirho", "cancelled_chirho"), `created_at_chirho`, `updated_at_chirho`.
 
 2.  **Functionality**:
     -   API endpoints for `SponsorUserChirho` to initiate a sponsorship for an available `ChildProfileChirho`.
@@ -148,7 +150,7 @@ Path: `src/donation_management_chirho/`
 ---
 
 1.  **Data Structures**:
-    -   `struct GeneralDonationChirho`: `donation_id_chirho` (UUID), `donor_user_id_chirho` (FK, if a registered sponsor) or `guest_donor_email_chirho`, `amount_chirho`, `donation_date_chirho`, `target_orphanage_id_chirho` (optional, for general orphanage support), `target_need_id_chirho` (optional, FK to a specific need), `payment_transaction_id_chirho`, `status_chirho`, `created_at_chirho`.
+    -   `struct GeneralDonationChirho`: `donation_id_chirho` (UUID), `donor_user_id_chirho` (FK, if a registered sponsor) or `guest_donor_email_chirho`, `amount_chirho`, `donation_date_chirho`, `target_orphanage_id_chirho` (optional), `target_need_id_chirho` (optional), `payment_transaction_id_chirho`, `status_chirho` (e.g., "pending_chirho", "completed_chirho", "failed_chirho", "refunded_chirho"), `created_at_chirho`, `updated_at_chirho`.
 
 2.  **Functionality**:
     -   API endpoints for one-time donations (general to an orphanage, or towards a specific published need).
@@ -168,7 +170,7 @@ Path: `src/communication_chirho/`
 ---
 
 1.  **Data Structures**:
-    -   `struct MessageChirho`: `message_id_chirho` (UUID), `sponsorship_id_chirho` (FK), `sender_user_id_chirho` (FK), `receiver_child_id_chirho` (FK, represents the child but message goes via staff), `message_text_chirho`, `sent_at_chirho`, `read_status_chirho` (bool), `moderation_status_chirho` (e.g.,"Pending", "Approved", "Rejected"), `moderator_staff_user_id_chirho` (optional FK).
+    -   `struct MessageChirho`: `message_id_chirho` (UUID), `sponsorship_id_chirho` (FK), `sender_user_id_chirho` (FK), `receiver_child_id_chirho` (FK), `message_text_chirho`, `sent_at_chirho`, `read_status_chirho` (bool), `moderation_status_chirho` (e.g., "pending_chirho", "approved_chirho", "rejected_chirho"), `moderator_staff_user_id_chirho` (optional FK), `created_at_chirho`, `updated_at_chirho`.
 
 2.  **Functionality**:
     -   Sponsors can send messages to their sponsored children. These messages are routed to orphanage staff for moderation.
@@ -192,7 +194,7 @@ Path: `src/needs_management_chirho/`
 ---
 
 1.  **Data Structures**:
-    -   `struct NeedItemChirho`: `need_id_chirho` (UUID), `orphanage_id_chirho` (FK), `item_name_chirho`, `description_chirho`, `quantity_needed_chirho`, `quantity_fulfilled_chirho`, `urgency_level_chirho` (e.g., "High", "Medium", "Low"), `status_chirho` (e.g., "Open", "Fulfilled", "InProgress"), `posted_by_staff_id_chirho` (FK), `created_at_chirho`, `updated_at_chirho`.
+    -   `struct NeedItemChirho`: `need_id_chirho` (UUID), `orphanage_id_chirho` (FK), `item_name_chirho`, `description_chirho`, `quantity_needed_chirho`, `quantity_fulfilled_chirho`, `urgency_level_chirho` (e.g., "high_chirho", "medium_chirho", "low_chirho"), `status_chirho` (e.g., "open_chirho", "fulfilled_chirho", "in_progress_chirho"), `posted_by_staff_id_chirho` (FK), `created_at_chirho`, `updated_at_chirho`.
 
 2.  **Functionality**:
     -   Orphanage staff can post specific needs (`NeedItemChirho`).
